@@ -1,5 +1,3 @@
-/**
- * UNCOMMENT: when "window is not defined" error fixed in Vite
 import { expect } from 'chai';
 import cheerio from 'cheerio';
 import { loadFixture } from './test-utils.js';
@@ -11,7 +9,6 @@ before(async () => {
   await fixture.build();
 });
 
-// TODO: fix "window is not defined" error in Vite
 describe('Client only components', () => {
   it('Loads pages using client:only hydrator', async () => {
     const html = await fixture.readFile('/index.html');
@@ -19,11 +16,13 @@ describe('Client only components', () => {
 
     // test 1: <astro-root> is empty
     expect($('astro-root').html()).to.equal('');
+    const script = $('script').text();
+    console.log(script);
 
     // test 2: svelte renderer is on the page
     const exp = /import\("(.+?)"\)/g;
     let match, svelteRenderer;
-    while ((match = exp.exec(result.contents))) {
+    while ((match = exp.exec(script))) {
       if (match[1].includes('renderers/renderer-svelte/client.js')) {
         svelteRenderer = match[1];
       }
@@ -35,6 +34,3 @@ describe('Client only components', () => {
     // expect(result.status).to.equal(200);
   });
 });
-*/
-
-it.skip('is skipped', () => {});
